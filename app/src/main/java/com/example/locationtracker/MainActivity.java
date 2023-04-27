@@ -29,8 +29,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int DEFAULT_UPDATE_INTERVAL = 300;
-    public static final int FAST_UPDATE_INTERVAL = 120;
+    public static final int DEFAULT_UPDATE_INTERVAL = 30;
+    public static final int FAST_UPDATE_INTERVAL = 5;
     private static final int PERMISSIONS_FINE_LOCATION = 99;
     TextView tv_lat, tv_lon, tv_altitude, tv_accuracy, tv_speed, tv_sensor, tv_updates, tv_address, tv_waypointCounter;
 
@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     if (location != null) {
                         updateUIValues(location);
                         currentLocation = location;
+                        //btn_newWaypoint.performClick();
                     }
                     else {
                         Toast.makeText(MainActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();

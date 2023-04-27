@@ -2,6 +2,7 @@ package com.example.locationtracker;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.locationtracker.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
@@ -51,12 +53,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        LatLng lastLocationPlaced = null;
+        LatLng prevLatLng = null;
+
         for(Location location : savedLocations) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title("Lat: " + location.getLatitude() + " Lon: " + location.getLongitude());
             mMap.addMarker(markerOptions);
+            if (prevLatLng != null) {
+                PolylineOptions polylineOptions = new PolylineOptions()
+                        .add(prevLatLng, latLng)
+                        .width(5)
+                        .color(Color.BLUE);
+                mMap.addPolyline(polylineOptions);
+            }
+            prevLatLng = latLng;
+            lastLocationPlaced = latLng;
         }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, 12f));
     }
 }
